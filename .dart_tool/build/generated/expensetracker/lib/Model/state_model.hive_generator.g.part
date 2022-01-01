@@ -1,0 +1,43 @@
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class StateModelAdapter extends TypeAdapter<StateModel> {
+  @override
+  final int typeId = 1;
+
+  @override
+  StateModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return StateModel(
+      outcome: fields[0] as double?,
+      income: fields[1] as double?,
+      total: fields[2] as double?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, StateModel obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.outcome)
+      ..writeByte(1)
+      ..write(obj.income)
+      ..writeByte(2)
+      ..write(obj.total);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StateModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
